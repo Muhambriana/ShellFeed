@@ -1,7 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.ShellFeed" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+<resources>
+    <!-- Base application theme for Compose-only app (Dark) -->
+    <style name="Base.Theme.ShellFeed" parent="android:Theme.Material.NoActionBar">
+        <!-- Compose will handle all theming -->
     </style>
 </resources>
