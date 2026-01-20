@@ -1,4 +1,4 @@
-package com.mshell.shellfeed.ui.theme
+package com.mshell.shellfeed.ui.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

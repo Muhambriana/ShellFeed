@@ -10,18 +10,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class NewsViewModel(
-    private val repository: ShellFeedRepository
-) : ViewModel() {
-
+class NewsViewModel(private val repository: ShellFeedRepository): ViewModel() {
     private val _newsState = MutableStateFlow<Resource<List<NewsDetail>?>>(Resource.Loading())
-    val newsState: StateFlow<Resource<List<NewsDetail>?>> = _newsState.asStateFlow()
+    val newsState: StateFlow<Resource<List<NewsDetail>?>> =_newsState.asStateFlow()
 
-    fun getTopHeadlines(country: String) {
+    init {
+        getTopHeadLines("us")
+    }
+
+    fun getTopHeadLines(country: String) {
         viewModelScope.launch {
-            // Call getTopHeadlines from repository which internally calls remoteDataSource
-            repository.getTopHeadlines(country).collect { resource ->
-                _newsState.value = resource
+            repository.getTopHeadlines(country).collect {
+                _newsState.value = it
             }
         }
     }

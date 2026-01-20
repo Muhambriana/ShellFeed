@@ -1,5 +1,6 @@
-package com.mshell.shellfeed.ui.theme
+package com.mshell.shellfeed.ui.ui.theme
 
+import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
