@@ -1,5 +1,6 @@
 package com.mshell.shellfeed.ui.features.news_list
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import coil.compose.AsyncImage
 import com.mshell.shellfeed.R
 import com.mshell.shellfeed.core.domain.model.NewsDetail
 import com.mshell.shellfeed.core.domain.model.Source
+import com.mshell.shellfeed.ui.ui.theme.ShellFeedTheme
 
 @Composable
 fun NewsItemCard(news: NewsDetail) {
@@ -77,11 +79,12 @@ fun NewsImageCover(
 @Preview(
     showSystemUi = true,
     showBackground = true,
-    name = "Card with Image"
+    name = "Card with Image",
+    uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
 fun NewsItemCardWithImagePreview() {
-    MaterialTheme {
+    ShellFeedTheme {
         NewsItemCard(
             news = NewsDetail(
                 title = "Technology Breakthrough: New Discovery Changes Everything",

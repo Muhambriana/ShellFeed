@@ -17,36 +17,37 @@ val Provider = GoogleFont.Provider(
 )
 
 val PoppinsFamily = FontFamily(
-    Font(googleFont = GoogleFont("Poppins"), fontProvider = Provider)
+    Font(googleFont = GoogleFont("Poppins"), fontProvider = Provider),
+    Font(googleFont = GoogleFont("Poppins"), fontProvider = Provider, weight = FontWeight.Bold),
+    Font(googleFont = GoogleFont("Poppins"), fontProvider = Provider, weight = FontWeight.SemiBold),
 )
 val InterFamily = FontFamily(
-    Font(googleFont = GoogleFont("Inter"), fontProvider = Provider)
+    Font(googleFont = GoogleFont("Inter"), fontProvider = Provider),
+    Font(googleFont = GoogleFont("Inter"), fontProvider = Provider, weight = FontWeight.Bold),
+    Font(googleFont = GoogleFont("Inter"), fontProvider = Provider, weight = FontWeight.SemiBold),
 )
 val DMSansFamily = FontFamily(
-    Font(googleFont = GoogleFont("DM Sans"), fontProvider = Provider)
+    Font(googleFont = GoogleFont("DM Sans"), fontProvider = Provider),
+    Font(googleFont = GoogleFont("DM Sans"), fontProvider = Provider, weight = FontWeight.Bold),
+    Font(googleFont = GoogleFont("DM Sans"), fontProvider = Provider, weight = FontWeight.SemiBold),
 )
 
+val baseline = Typography()
+
 val Typography = Typography(
-    displayLarge = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    displayMedium = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    displaySmall = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    headlineLarge = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    headlineMedium = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    headlineSmall = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    titleLarge = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    titleMedium = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    titleSmall = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    bodyLarge = TextStyle(
-        fontFamily = PoppinsFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp,
-        color = androidx.compose.ui.graphics.Color.Cyan
-    ),
-    bodyMedium = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    bodySmall = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    labelLarge = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    labelMedium = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan),
-    labelSmall = TextStyle(fontFamily = PoppinsFamily, color = androidx.compose.ui.graphics.Color.Cyan)
+    displayLarge = baseline.displayLarge.copy(fontFamily = DMSansFamily),
+    displayMedium = baseline.displayMedium.copy(fontFamily = DMSansFamily),
+    displaySmall = baseline.displaySmall.copy(fontFamily = DMSansFamily),
+    headlineLarge = baseline.headlineLarge.copy(fontFamily = DMSansFamily),
+    headlineMedium = baseline.headlineMedium.copy(fontFamily = DMSansFamily),
+    headlineSmall = baseline.headlineSmall.copy(fontFamily = DMSansFamily),
+    titleLarge = baseline.titleLarge.copy(fontFamily = DMSansFamily),
+    titleMedium = baseline.titleMedium.copy(fontFamily = DMSansFamily),
+    titleSmall = baseline.titleSmall.copy(fontFamily = DMSansFamily),
+    bodyLarge = baseline.bodyLarge.copy(fontFamily = DMSansFamily),
+    bodyMedium = baseline.bodyMedium.copy(fontFamily = DMSansFamily),
+    bodySmall = baseline.bodySmall.copy(fontFamily = DMSansFamily),
+    labelLarge = baseline.labelLarge.copy(fontFamily = DMSansFamily),
+    labelMedium = baseline.labelMedium.copy(fontFamily = DMSansFamily),
+    labelSmall = baseline.labelSmall.copy(fontFamily = DMSansFamily)
 )

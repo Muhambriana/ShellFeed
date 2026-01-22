@@ -1,5 +1,6 @@
 package com.mshell.shellfeed.ui.features.news_list
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,10 +17,12 @@ import androidx.compose.ui.unit.dp
 import com.mshell.shellfeed.core.data.source.Resource
 import com.mshell.shellfeed.core.domain.model.NewsDetail
 import com.mshell.shellfeed.core.domain.model.Source
+import com.mshell.shellfeed.ui.ui.theme.ShellFeedTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun NewsListScreen(
-    viewModel: NewsViewModel
+    viewModel: NewsViewModel = koinViewModel()
 ) {
     val newsState by viewModel.newsState.collectAsState()
 
@@ -27,21 +30,60 @@ fun NewsListScreen(
         is Resource.Success -> {
             val newsList = newsState.data
             if (newsList.isNullOrEmpty()) {
-
                 return
             }
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(
-                    items = newsList,
-                    key = { it.url ?: ""}
-                ) { news ->
-                    NewsItemCard(news)
-                }
-            }
+
+            NewsList(newsList)
         }
         else -> {}
+    }
+}
+
+@Composable
+fun NewsList(newsList: List<NewsDetail>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(
+            items = newsList,
+            key = { it.url ?: ""}
+        ) { news ->
+            NewsItemCard(news)
+        }
+    }
+}
+
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+)
+@Composable
+fun NewsListScreenPreview() {
+    val sampleNews = listOf(
+        NewsDetail(
+            source = Source(id = "1", name = "Source 1"),
+            author = "Author 1",
+            title = "Sample News Title 1",
+            description = "This is a sample news description 1.",
+            url = "https://example.com/news1",
+            urlToImage = null,
+            publishedAt = "2024-01-01T00:00:00Z",
+            content = "Full content of the sample news article 1."
+        ),
+        NewsDetail(
+            source = Source(id = "2", name = "Source 2"),
+            author = "Author 2",
+            title = "Sample News Title 2",
+            description = "This is a sample news description 2.",
+            url = "https://example.com/news2",
+            urlToImage = null,
+            publishedAt = "2024-01-02T00:00:00Z",
+            content = "Full content of the sample news article 2."
+        )
+    )
+
+    ShellFeedTheme {
+        NewsList(newsList = sampleNews)
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.mshell.shellfeed.ui.navigation.AppNavigation
 import com.mshell.shellfeed.ui.ui.theme.ShellFeedTheme
 
 class HomeActivity : ComponentActivity() {
@@ -20,28 +21,17 @@ class HomeActivity : ComponentActivity() {
         setContent {
             ShellFeedTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    AppNavigation()
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun AppPreview() {
     ShellFeedTheme {
-        Greeting("Android")
+        AppNavigation()
     }
 }
