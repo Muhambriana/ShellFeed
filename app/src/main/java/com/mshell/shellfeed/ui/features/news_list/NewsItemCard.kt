@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -19,6 +20,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -50,8 +54,15 @@ fun NewsItemCard(news: NewsDetail) {
                     .weight(0.7f)
                     .padding(16.dp)
             ) {
-                Text(text = news.title ?: "", style = MaterialTheme.typography.titleSmall)
-                Text(text = news.author ?: "", style = MaterialTheme.typography.bodySmall)
+                Text(
+                    text = news.title ?: stringResource(R.string.hyphen),
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = news.author ?: stringResource(R.string.hyphen),
+                    style = MaterialTheme.typography.bodySmall)
             }
         }
     }
@@ -72,7 +83,7 @@ fun NewsImageCover(
         contentScale = ContentScale.Crop,
         modifier = modifier
             .padding(10.dp)
-            .clip(RoundedCornerShape(24.dp)),
+            .clip(RoundedCornerShape(16.dp)),
     )
 }
 
@@ -87,7 +98,7 @@ fun NewsItemCardWithImagePreview() {
     ShellFeedTheme {
         NewsItemCard(
             news = NewsDetail(
-                title = "Technology Breakthrough: New Discovery Changes Everything",
+                title = "Technology Breakthrough: New Discovery Changes Everything. And Do anything",
                 description = "Scientists have made an incredible discovery that could revolutionize the way we live our daily lives.",
                 author = "Jane Smith",
                 urlToImage = "https://imagez.tmz.com/image/0d/16by9/2026/01/18/0dc0a3471f6b49fda78b4d56faa7dc92_xl.jpg",
