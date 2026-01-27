@@ -32,13 +32,17 @@ import com.mshell.shellfeed.core.domain.model.Source
 import com.mshell.shellfeed.ui.ui.theme.ShellFeedTheme
 
 @Composable
-fun NewsItemCard(news: NewsDetail) {
+fun NewsItemCard(
+    news: NewsDetail,
+    onClick: () -> Unit = {}
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(120.dp)
             .padding(horizontal = 16.dp, vertical = 4.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(4.dp),
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -107,6 +111,7 @@ fun NewsItemCardWithImagePreview() {
                 url = "https://example.com/article2",
                 content = null
             ),
+            onClick = {}
         )
     }
 }

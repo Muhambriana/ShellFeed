@@ -82,7 +82,7 @@ fun NewsDetailScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(
-                    top = 380.dp,
+                    top = 450.dp,
                     bottom = paddingValues.calculateBottomPadding() + 24.dp,
                     start = 24.dp,
                     end = 24.dp
@@ -135,7 +135,7 @@ fun NewsDetailTopBar(
 
 @Composable
 fun NewsHeader(newsDetail: NewsDetail) {
-    val headerHeight = 350.dp
+    val headerHeight = 440.dp
     val shape = RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp)
 
     Box(

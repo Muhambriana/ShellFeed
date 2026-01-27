@@ -22,7 +22,8 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun NewsListScreen(
-    viewModel: NewsViewModel = koinViewModel()
+    viewModel: NewsViewModel = koinViewModel(),
+    onItemClick: (NewsDetail) -> Unit = {}
 ) {
     val newsState by viewModel.newsState.collectAsState()
 
@@ -33,23 +34,29 @@ fun NewsListScreen(
                 return
             }
 
-            NewsList(newsList)
+            NewsList(newsList, onItemClick = onItemClick)
         }
         else -> {}
     }
 }
 
 @Composable
-fun NewsList(newsList: List<NewsDetail>) {
+fun NewsList(
+    newsList: List<NewsDetail>,
+    onItemClick: (NewsDetail) -> Unit = {}
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(
             items = newsList,
-            key = { it.url ?: ""}
+            key = { it.url ?: ""},
         ) { news ->
-            NewsItemCard(news)
+            NewsItemCard(
+                news,
+                onClick = { onItemClick(news) }
+            )
         }
     }
 }
