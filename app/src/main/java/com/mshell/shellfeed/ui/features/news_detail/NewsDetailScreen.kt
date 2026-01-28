@@ -1,6 +1,7 @@
 package com.mshell.shellfeed.ui.features.news_detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -43,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,6 +57,7 @@ import com.mshell.shellfeed.core.domain.model.Source
 import com.mshell.shellfeed.ui.ui.theme.ShellFeedTheme
 import com.mshell.shellfeed.utils.TimeUtil
 
+private val HEADER_HEIGHT = 440.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsDetailScreen(
@@ -66,7 +70,7 @@ fun NewsDetailScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        NewsHeader(newsDetail)
+        NewsHeader(newsDetail, headerHeight = HEADER_HEIGHT)
 
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehaviors.nestedScrollConnection),
@@ -82,7 +86,7 @@ fun NewsDetailScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(
-                    top = 450.dp,
+                    top = HEADER_HEIGHT,
                     bottom = paddingValues.calculateBottomPadding() + 24.dp,
                     start = 24.dp,
                     end = 24.dp
@@ -134,8 +138,7 @@ fun NewsDetailTopBar(
 }
 
 @Composable
-fun NewsHeader(newsDetail: NewsDetail) {
-    val headerHeight = 440.dp
+fun NewsHeader(newsDetail: NewsDetail, headerHeight: androidx.compose.ui.unit.Dp) {
     val shape = RoundedCornerShape(bottomStart = 40.dp, bottomEnd = 40.dp)
 
     Box(
@@ -145,11 +148,9 @@ fun NewsHeader(newsDetail: NewsDetail) {
             .clip(shape)
     ) {
         AsyncImage(
-            placeholder =
-                if (LocalInspectionMode.current) ColorPainter(Color.LightGray)
-                else null,
+            placeholder = ColorPainter(Color.LightGray),
             model = ImageRequest.Builder(LocalContext.current)
-                .data(newsDetail.url)
+                .data(newsDetail.urlToImage)
                 .crossfade(true)
                 .build(),
             contentDescription = "News Header Image",
@@ -190,26 +191,42 @@ fun NewsHeader(newsDetail: NewsDetail) {
 fun NewsMetaRow(newsDetail: NewsDetail) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().padding(top = 10.dp)
     ) {
-        val textStyle = MaterialTheme.typography.bodySmall.copy(color = Color.White.copy(alpha = 0.8f))
+        val textStyle = MaterialTheme.typography.bodySmall.copy(
+            color = Color.White.copy(alpha = 0.8f),
+            fontSize = 12.sp
+        )
 
-        Text(text = newsDetail.author ?: "Unknown", style = textStyle)
-        Text(text = " • ", style = textStyle, modifier = Modifier.padding(horizontal = 4.dp))
-        Text(text = newsDetail.source?.name ?: "News", style = textStyle)
-        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = newsDetail.author ?: "Unknown",
+            textAlign  = TextAlign.End,
+            style = textStyle,
+            modifier = Modifier.widthIn(max = 100.dp),
+        )
+        Text(
+            text = " • ", style = textStyle,
+            modifier = Modifier.padding(horizontal = 4.dp),
+        )
+        Text(
+            text = newsDetail.source?.name ?: "News",
+            style = textStyle,
+            modifier = Modifier.width(100.dp)
+        )
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End,
+            modifier = Modifier.fillMaxWidth()
         ) {
             Icon(
                 imageVector = Icons.Outlined.DateRange,
                 tint = Color.White,
-                contentDescription = null
+                contentDescription = null,
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = TimeUtil.getTimeAgo(newsDetail.publishedAt),
-                style = textStyle
+                style = textStyle,
             )
         }
     }
@@ -217,7 +234,9 @@ fun NewsMetaRow(newsDetail: NewsDetail) {
 
 @Composable
 fun NewsBodyContent(newsDetail: NewsDetail) {
-    Column {
+    Column(
+        modifier = Modifier.padding(top = 10.dp)
+    ) {
         Text(
             text = newsDetail.content ?: stringResource(R.string.hyphen),
             style = MaterialTheme.typography.bodyLarge,
