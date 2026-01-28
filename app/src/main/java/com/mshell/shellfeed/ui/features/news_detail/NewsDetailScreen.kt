@@ -1,9 +1,11 @@
 package com.mshell.shellfeed.ui.features.news_detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -22,9 +25,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.Create
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,12 +45,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -54,10 +63,11 @@ import coil.request.ImageRequest
 import com.mshell.shellfeed.R
 import com.mshell.shellfeed.core.domain.model.NewsDetail
 import com.mshell.shellfeed.core.domain.model.Source
+import com.mshell.shellfeed.ui.ui.theme.LoraFontFamily
 import com.mshell.shellfeed.ui.ui.theme.ShellFeedTheme
 import com.mshell.shellfeed.utils.TimeUtil
 
-private val HEADER_HEIGHT = 440.dp
+private val HEADER_HEIGHT = 470.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsDetailScreen(
@@ -115,7 +125,8 @@ fun NewsDetailTopBar(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back"
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         },
@@ -125,7 +136,8 @@ fun NewsDetailTopBar(
             ) {
                 Icon(
                     imageVector = Icons.Default.Share,
-                    contentDescription = "Share"
+                    contentDescription = "Share",
+                    tint = MaterialTheme.colorScheme.onSurface
                 )
             }
         },
@@ -189,59 +201,79 @@ fun NewsHeader(newsDetail: NewsDetail, headerHeight: androidx.compose.ui.unit.Dp
 
 @Composable
 fun NewsMetaRow(newsDetail: NewsDetail) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Column (
         modifier = Modifier.fillMaxWidth().padding(top = 10.dp)
     ) {
         val textStyle = MaterialTheme.typography.bodySmall.copy(
-            color = Color.White.copy(alpha = 0.8f),
-            fontSize = 12.sp
+            color = Color.White.copy(alpha = 0.8f)
         )
 
-        Text(
-            text = newsDetail.author ?: "Unknown",
-            textAlign  = TextAlign.End,
-            style = textStyle,
-            modifier = Modifier.widthIn(max = 100.dp),
-        )
-        Text(
-            text = " • ", style = textStyle,
-            modifier = Modifier.padding(horizontal = 4.dp),
-        )
-        Text(
-            text = newsDetail.source?.name ?: "News",
-            style = textStyle,
-            modifier = Modifier.width(100.dp)
-        )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.DateRange,
-                tint = Color.White,
-                contentDescription = null,
-            )
-            Spacer(modifier = Modifier.width(4.dp))
+        Row {
             Text(
-                text = TimeUtil.getTimeAgo(newsDetail.publishedAt),
+                text = "By ",
                 style = textStyle,
             )
+            Text(
+                text = newsDetail.author ?: "Unknown",
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = Color.Green.copy(alpha = 0.8f),
+                )
+            )
         }
+        Spacer(modifier = Modifier.height(4.dp))
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = Color.White
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            style = textStyle,
+            text = "Published ${TimeUtil.getTimeAgo(newsDetail.publishedAt)}",
+        )
     }
 }
 
 @Composable
 fun NewsBodyContent(newsDetail: NewsDetail) {
+    val uriHandler = LocalUriHandler.current
     Column(
         modifier = Modifier.padding(top = 10.dp)
     ) {
         Text(
             text = newsDetail.content ?: stringResource(R.string.hyphen),
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodyLarge.copy(
+                fontFamily = LoraFontFamily
+            ),
             lineHeight = 26.sp
         )
+        Column(
+            modifier = Modifier
+                .padding(top = 20.dp)
+                .width(IntrinsicSize.Max)
+                .align(Alignment.CenterHorizontally)
+        ) {
+            Row(
+                modifier = Modifier.clickable(true) {
+                    newsDetail.url?.let {
+                        uriHandler.openUri(it)
+                    }
+                }
+            ) {
+                Text(
+                    text = "Original Source: ",
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    )
+                )
+                Text(
+                    text = newsDetail.source?.name ?: stringResource(R.string.hyphen),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            HorizontalDivider(
+                thickness = 1.dp
+            )
+        }
     }
 }
 

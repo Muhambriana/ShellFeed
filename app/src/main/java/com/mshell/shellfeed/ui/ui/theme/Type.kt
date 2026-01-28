@@ -32,6 +32,15 @@ val DMSansFamily = FontFamily(
     Font(googleFont = GoogleFont("DM Sans"), fontProvider = Provider, weight = FontWeight.SemiBold),
 )
 
+val LoraFont = GoogleFont("Lora")
+
+// 3. Create the FontFamily
+val LoraFontFamily = FontFamily(
+    Font(googleFont = LoraFont, fontProvider = Provider, weight = FontWeight.Normal),
+    Font(googleFont = LoraFont, fontProvider = Provider, weight = FontWeight.Medium),
+    Font(googleFont = LoraFont, fontProvider = Provider, weight = FontWeight.Bold)
+)
+
 val baseline = Typography()
 
 val Typography = Typography(
