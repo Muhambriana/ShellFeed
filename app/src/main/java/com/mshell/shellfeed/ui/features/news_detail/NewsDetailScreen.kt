@@ -30,10 +30,12 @@ import androidx.compose.material.icons.outlined.DateRange
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -202,7 +204,9 @@ fun NewsHeader(newsDetail: NewsDetail, headerHeight: androidx.compose.ui.unit.Dp
 @Composable
 fun NewsMetaRow(newsDetail: NewsDetail) {
     Column (
-        modifier = Modifier.fillMaxWidth().padding(top = 10.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp)
     ) {
         val textStyle = MaterialTheme.typography.bodySmall.copy(
             color = Color.White.copy(alpha = 0.8f)
@@ -246,32 +250,24 @@ fun NewsBodyContent(newsDetail: NewsDetail) {
             ),
             lineHeight = 26.sp
         )
-        Column(
-            modifier = Modifier
-                .padding(top = 20.dp)
-                .width(IntrinsicSize.Max)
-                .align(Alignment.CenterHorizontally)
+        ExtendedFloatingActionButton(
+            onClick = { newsDetail.url?.let { uriHandler.openUri(it) } },
+            shape = RoundedCornerShape(20.dp),
+            containerColor = Color(0xFF3E7EE8),
+            contentColor = Color.White,
+            modifier = Modifier.padding(top = 20.dp)
+                .width(150.dp)
+                .size(40.dp)
         ) {
-            Row(
-                modifier = Modifier.clickable(true) {
-                    newsDetail.url?.let {
-                        uriHandler.openUri(it)
-                    }
-                }
-            ) {
-                Text(
-                    text = "Original Source: ",
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
-                    )
-                )
-                Text(
-                    text = newsDetail.source?.name ?: stringResource(R.string.hyphen),
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            HorizontalDivider(
-                thickness = 1.dp
+            Icon(
+                painter =  painterResource(R.drawable.ic_link),
+                contentDescription = stringResource(R.string.read_more),
+                modifier = Modifier.size(30.dp)
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = stringResource(R.string.read_more),
+                fontSize = 15.sp
             )
         }
     }
