@@ -3,7 +3,7 @@ name: Continuous Integration Pull Request
 on:
   push:
     branches:
-      - "feature/**"
+      - "feat/**"
       - "fix/**"
       - "chore/**"
   pull_request:
