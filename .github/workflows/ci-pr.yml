@@ -35,8 +35,8 @@ jobs:
 
       - name: Verify Compilation (All Flavors)
         env:
-          BASE_URL: ${{ secrets.BASE_URL }}
-          API_KEY: ${{ secrets.API_KEY }}
+          BASE_URL: \${{ secrets.BASE_URL }}
+          API_KEY: \${{ secrets.API_KEY }}
           # Using 'assemble' with no flavor suffix can be slow.
         # It's better to pick one main flavor for CI check:
         run: ./gradlew :app:assembleDevDebug --dry-run
