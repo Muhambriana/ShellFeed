@@ -33,11 +33,16 @@ jobs:
 
       - run: chmod +x ./gradlew
 
-      - name: Verify Compilation (All Flavors) - use env vars
-        env:
-          BASE_URL: ${{ secrets.BASE_URL }}
-          API_KEY: ${{ secrets.API_KEY }}
-        # Using 'assemble' with no flavor suffix can be slow.
+      - name: Create local.properties (CI)
+        run: |
+          cat > local.properties <<EOF
+          sdk.dir=${{ runner.tool_cache }}/android-sdk
+          API_KEY=${{ secrets.API_KEY }}
+          BASE_URL=${{ secrets.BASE_URL }}
+          EOF
+
+      - name: Verify Compilation (All Flavors)
+          # Using 'assemble' with no flavor suffix can be slow.
         # It's better to pick one main flavor for CI check:
         run: ./gradlew :app:assembleDevDebug --dry-run
 
