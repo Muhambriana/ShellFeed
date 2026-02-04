@@ -1,3 +1,4 @@
+import java.util.Locale
 import java.util.Properties
 
 plugins {
@@ -8,6 +9,11 @@ plugins {
 }
 
 fun loadProperty(propertyName: String, defaultValue: String = ""): String {
+    (project.findProperty(propertyName) as String?)?.takeIf { it.isNotBlank() }?.let { return it }
+
+    System.getenv(propertyName)?.takeIf { it.isNotBlank() }?.let { return it }
+    System.getenv(propertyName.uppercase(Locale.US))?.takeIf { it.isNotBlank() }?.let { return it }
+
     val propertiesFile = rootProject.file("local.properties")
     return Properties().apply {
         if (propertiesFile.exists()) load(propertiesFile.inputStream())
@@ -15,8 +21,8 @@ fun loadProperty(propertyName: String, defaultValue: String = ""): String {
 }
 
 // Load properties using the function
-val apiKey: String by lazy { loadProperty("apiKey") }
-val baseURL: String by lazy { loadProperty("baseURL") }
+val apiKey: String by lazy { loadProperty("API_KEY") }
+val baseURL: String by lazy { loadProperty("BASE_URL") }
 
 android {
     flavorDimensions += "env"
