@@ -3,6 +3,6 @@ package com.mshell.shellfeed.core.utils
 import com.mshell.shellfeed.BuildConfig
 
 object NetworkInfo {
-    const val BASE_URL = BuildConfig.BASE_URL
-    const val API_KEY = BuildConfig.API_KEY
+    val BASE_URL by lazy { BuildConfig.BASE_URL }
+    val API_KEY by lazy { BuildConfig.API_KEY }
 }
