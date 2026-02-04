@@ -1,0 +1,35 @@
+#name: Continuous Deployment Develop Branch
+#
+#on:
+#  push:
+#    branches:
+#      - "develop"
+#
+#jobs:
+#  dev:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - uses: actions/checkout@v4
+#
+#      - uses: actions/setup-java@v4
+#        with:
+#          distribution: temurin
+#          java-version: 17
+#
+#      - uses: android-actions/setup-android@v2
+#
+#      - run: chmod +x ./gradlew
+#
+#      # choose debug or release build as per your requirement
+#      - name: build debug apk
+#        run: ./gradlew assembleDevDebug
+#
+#      # firebase app distribution
+#      - name: upload to firebase app distribution
+#        uses: wzieba/Firebase-Distribution-Github-Action@v1
+#        with:
+#          appId: ${{ secrets.FIREBASE_APP_ID }}
+#          token: ${{ secrets.FIREBASE_TOKEN }}
+#          groups: QA
+#          file: app/build/outputs/apk/dev/debug/app-dev-debug.apk
