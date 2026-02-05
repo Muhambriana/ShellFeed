@@ -36,7 +36,7 @@ jobs:
 
       - name: debug apk location
         run: |
-          echo "==== LIST EVERYTHING ===="
+          echo "===== LIST EVERYTHING ====="
           find . -name "*.apk" || true
 
       # firebase app distribution
