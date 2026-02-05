@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.getByName
 import java.util.Locale
 import java.util.Properties
 
@@ -74,6 +75,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
