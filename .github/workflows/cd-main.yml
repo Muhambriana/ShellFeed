@@ -34,13 +34,13 @@ jobs:
           BASE_URL: ${{ secrets.BASE_URL }}
           API_KEY: ${{ secrets.API_KEY }}
 
-      - name: upload apk to google drive
-        uses: patrickvilla/google-drive-upload-action@v1
+      # google drive app distribution
+      - name: upload to google drive
+        uses: willo32/google-drive-upload-action@v1
         with:
+          target: "app/build/outputs/apk/production/release/app-production-release.apk"
           credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
-          filename: app/build/outputs/apk/production/release/app-production-release.apk
-          folderId: ${{ secrets.GDRIVE_FOLDER_ID }}
-          overwrite: true
+          parent_folder_id: ${{ secrets.GDRIVE_FOLDER_ID }}
 
       # firebase app distribution
 #      - name: upload to firebase app distribution
