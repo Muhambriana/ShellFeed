@@ -57,7 +57,7 @@ android {
             storeFile = file("../keystore.jks")
             storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "KEYSTORE_PASSWORD"
             keyAlias = System.getenv("KEYSTORE_ALIAS") ?: "KEYSTORE_ALIAS"
-            keyPassword = System.getenv("KEYSTORE_KEY_PASSWORD") ?: "KEYSTORE_KEY_PASSWORD"
+            keyPassword = System.getenv("KEYSTORE_ALIAS_PASSWORD") ?: "KEYSTORE_ALIAS_PASSWORD"
         }
     }
 
