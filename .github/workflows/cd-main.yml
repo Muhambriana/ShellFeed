@@ -34,11 +34,19 @@ jobs:
           BASE_URL: ${{ secrets.BASE_URL }}
           API_KEY: ${{ secrets.API_KEY }}
 
-      # firebase app distribution
-      - name: upload to firebase app distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
+      - name: upload apk to google drive
+        uses: patrickvilla/google-drive-upload-action@v1
         with:
-          appId: ${{ secrets.FIREBASE_APP_ID }}
-          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          file: app/build/outputs/apk/production/release/app-production-release.apk
-          groups: production
+          credentials: ${{ secrets.GDRIVE_SERVICE_ACCOUNT }}
+          filename: app/build/outputs/apk/production/release/app-production-release.apk
+          folderId: ${{ secrets.GDRIVE_FOLDER_ID }}
+          overwrite: true
+
+      # firebase app distribution
+#      - name: upload to firebase app distribution
+#        uses: wzieba/Firebase-Distribution-Github-Action@v1
+#        with:
+#          appId: ${{ secrets.FIREBASE_APP_ID }}
+#          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+#          file: app/build/outputs/apk/production/release/app-production-release.apk
+#          groups: production
