@@ -25,6 +25,13 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > app/keystore.jks
 
+      - name: debug signing
+        run: |
+          echo "pwd:"
+          pwd
+          ls -l
+          ls -l keystore.jks || echo "NO KEYSTORE"
+
       - name: build release apk
         run: ./gradlew assembleProductionRelease
         env:
