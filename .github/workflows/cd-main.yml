@@ -25,13 +25,6 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > keystore.jks
 
-      - name: debug signing
-        run: |
-          echo "pwd:"
-          pwd
-          ls -l
-          ls -l keystore.jks || echo "NO KEYSTORE"
-
       - name: build release apk
         run: ./gradlew assembleProductionRelease
         env:
@@ -41,16 +34,11 @@ jobs:
           BASE_URL: ${{ secrets.BASE_URL }}
           API_KEY: ${{ secrets.API_KEY }}
 
-      - name: debug apk location
-        run: |
-          echo "===== LIST EVERYTHING ====="
-          find . -name "*.apk" || true
-
       # firebase app distribution
-#      - name: upload to firebase app distribution
-#        uses: wzieba/Firebase-Distribution-Github-Action@v1
-#        with:
-#          appId: ${{ secrets.FIREBASE_APP_ID }}
-#          token: ${{ secrets.FIREBASE_TOKEN }}
-#          file: app/production/release/app-production-release.apk
-#          groups: production
+      - name: upload to firebase app distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID }}
+          token: ${{ secrets.FIREBASE_TOKEN }}
+          file: app/production/release/app-production-release.apk
+          groups: production
