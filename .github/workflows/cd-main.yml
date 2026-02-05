@@ -40,5 +40,5 @@ jobs:
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           token: ${{ secrets.FIREBASE_TOKEN }}
-          file: app/build/outputs/apk/production/release/app-production-release.apk
+          file: app/production/release/app-production-release.apk
           groups: production
