@@ -109,7 +109,7 @@ fun NewsItemCardWithImagePreview() {
                 publishedAt = "2026-01-18T14:20:00Z",
                 source = Source(name = "TechCrunch", id = "techcrunch"),
                 url = "https://example.com/article2",
-                content = null
+                content = "In a groundbreaking study published today, researchers at the University of Innovation have unveiled a new technology that promises to change the way we interact with our environment. The discovery, which involves a novel material with unique properties, has the potential to impact various industries, from healthcare to transportation. Experts are calling it a game-changer, and the scientific community is buzzing with excitement about the possibilities this breakthrough could unlock."
             ),
             onClick = {}
         )
