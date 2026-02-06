@@ -21,28 +21,19 @@ jobs:
 
       - run: chmod +x ./gradlew
 
-      - name: decode keystore
+      - name: Get version
+        id: get_version
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > keystore.jks
+          VERSION_NAME=$(grep "versionName" app/build.gradle.kts | sed 's/.*= "\(.*\)".*/\1/' | tr -d ' ')
+          echo "VERSION=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "Extracted version: $VERSION_NAME"
 
-      - name: Test Extraction Logic
-        id: tester
-        run: |
-          # 1. Search in the .kts file
-          # This look for 'versionName =' or 'versionName =' and grabs the text inside quotes
-          VERSION=$(grep "versionName" app/build.gradle.kts | sed -E 's/.*"([^"]+)".*/\1/; s/.*'\''([^'\'']+)'\''.*/\1/')
+      - name: Set filename
+        run: echo "FILENAME=app-prod-v${{ steps.get_version.outputs.VERSION }}-$(date +%Y%m%d-%H%M%S).apk" >> $GITHUB_ENV
 
-          # 2. Safety check: if the above is still the whole line, strip non-version characters
-          if [[ "$VERSION" == *"versionName"* ]]; then
-             VERSION=$(echo "$VERSION" | sed 's/[^0-9.]*//g')
-          fi
-
-          echo "Extracted Version: $VERSION"
-          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Final Check
-        run: |
-          echo "The variable saved is: ${{ steps.tester.outputs.VERSION }}"
+#      - name: decode keystore
+#        run: |
+#          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > keystore.jks
 
 #      - name: build release apk
 #        run: ./gradlew assembleProductionRelease
@@ -57,13 +48,13 @@ jobs:
 #      - name: Get version
 #        id: get_version
 #        run: |
-#          VERSION_NAME=$(grep "versionName" app/build.gradle | awk -F'"' '{print $2}')
+#          VERSION_NAME=$(grep "versionName" app/build.gradle.kts | sed 's/.*= "\(.*\)".*/\1/' | tr -d ' ')
 #          echo "VERSION=$VERSION_NAME" >> $GITHUB_OUTPUT
+#          echo "Extracted version: $VERSION_NAME"
 #
-#      # Generate filename with version
 #      - name: Set filename
-#        run: echo "FILENAME=app-prod-v${{ steps.get_version.outputs.VERSION_NAME }}-$(date +%Y%m%d-%H%M%S).apk" >> $GITHUB_ENV
-
+#        run: echo "FILENAME=app-prod-v${{ steps.get_version.outputs.VERSION }}-$(date +%Y%m%d-%H%M%S).apk" >> $GITHUB_ENV
+#
 #      - name: Configure AWS Credentials
 #        uses: aws-actions/configure-aws-credentials@v4
 #        with:
