@@ -25,64 +25,87 @@ jobs:
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > keystore.jks
 
-      - name: build release apk
-        run: ./gradlew assembleProductionRelease
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
-          KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
-          BASE_URL: ${{ secrets.BASE_URL }}
-          API_KEY: ${{ secrets.API_KEY }}
+      - name: Debug build.gradle
+        run: |
+          echo "Checking build.gradle files:"
+          cat app/build.gradle || echo "app/build.gradle not found"
+          cat app/build.gradle.kts || echo "app/build.gradle.kts not found"
 
-      # Extract version from build.gradle
-      - name: Get version
-        id: get_version
+      - name: Peek at build.gradle
         run: |
-          VERSION_NAME=$(grep "versionName" app/build.gradle | awk '{print $2}' | tr -d '"')
-          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "Searching for versionName line..."
+          grep "versionName" app/build.gradle || echo "versionName NOT FOUND"
 
-      # Generate filename with version
-      - name: Set filename
-        run: echo "FILENAME=app-prod-v${{ steps.get_version.outputs.VERSION_NAME }}-$(date +%Y%m%d-%H%M%S).apk" >> $GITHUB_ENV
+      - name: Test Extraction Logic
+        id: tester
+        run: |
+          # This handles both double quotes "1.0" and single quotes '1.0'
+          VERSION=$(grep "versionName" app/build.gradle | sed 's/[^0-9.]*//g')
+          echo "Extracted Version: $VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-       
-      # S3 app distribution
-      - name: Upload to S3 (Production)
+      - name: Final Check
         run: |
-          aws s3 cp app/build/outputs/apk/production/release/app-production-release.apk \
-          s3://${{ secrets.AWS_S3_BUCKET_NAME }}/production/$FILENAME
-       
-      # Google Drive app distribution
-      - name: Setup Rclone
-        uses: AnimMouse/setup-rclone@v1
-        with:
-          # pass the config as environment variables below, so we can leave this empty
-          rclone_config: ""
-      
-      - name: Upload APK to Google Drive
-        run: |
-          rclone copyto "app/build/outputs/apk/production/release/app-production-release.apk" "gdrive:$FILENAME"
-        env:
-          RCLONE_CONFIG_GDRIVE_TYPE: drive
-          RCLONE_CONFIG_GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
-          RCLONE_CONFIG_GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
-          RCLONE_CONFIG_GDRIVE_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
-          RCLONE_CONFIG_GDRIVE_ROOT_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
-      
-      # Firebase app distribution
-      - name: upload to firebase app distribution
-        run: |
-          cp app/build/outputs/apk/production/release/app-production-release.apk "$FILENAME"
-    
-      - uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{ secrets.FIREBASE_APP_ID }}
-          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          file: ${{ env.FILENAME }}
-          groups: production
+          echo "The variable saved is: ${{ steps.tester.outputs.VERSION }}"
+
+#      - name: build release apk
+#        run: ./gradlew assembleProductionRelease
+#        env:
+#          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+#          KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+#          KEYSTORE_ALIAS_PASSWORD: ${{ secrets.KEYSTORE_ALIAS_PASSWORD }}
+#          BASE_URL: ${{ secrets.BASE_URL }}
+#          API_KEY: ${{ secrets.API_KEY }}
+#
+#      # Extract version from build.gradle
+#      - name: Get version
+#        id: get_version
+#        run: |
+#          VERSION_NAME=$(grep "versionName" app/build.gradle | awk -F'"' '{print $2}')
+#          echo "VERSION=$VERSION_NAME" >> $GITHUB_OUTPUT
+#
+#      # Generate filename with version
+#      - name: Set filename
+#        run: echo "FILENAME=app-prod-v${{ steps.get_version.outputs.VERSION_NAME }}-$(date +%Y%m%d-%H%M%S).apk" >> $GITHUB_ENV
+
+#      - name: Configure AWS Credentials
+#        uses: aws-actions/configure-aws-credentials@v4
+#        with:
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: ${{ secrets.AWS_REGION }}
+#
+#      # S3 app distribution
+#      - name: Upload to S3 (Production)
+#        run: |
+#          aws s3 cp app/build/outputs/apk/production/release/app-production-release.apk \
+#          s3://${{ secrets.AWS_S3_BUCKET_NAME }}/production/$FILENAME
+#
+#      # Google Drive app distribution
+#      - name: Setup Rclone
+#        uses: AnimMouse/setup-rclone@v1
+#        with:
+#          # pass the config as environment variables below, so we can leave this empty
+#          rclone_config: ""
+#
+#      - name: Upload APK to Google Drive
+#        run: |
+#          rclone copyto "app/build/outputs/apk/production/release/app-production-release.apk" "gdrive:$FILENAME"
+#        env:
+#          RCLONE_CONFIG_GDRIVE_TYPE: drive
+#          RCLONE_CONFIG_GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+#          RCLONE_CONFIG_GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+#          RCLONE_CONFIG_GDRIVE_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
+#          RCLONE_CONFIG_GDRIVE_ROOT_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
+#
+#      # Firebase app distribution
+#      - name: upload to firebase app distribution
+#        run: |
+#          cp app/build/outputs/apk/production/release/app-production-release.apk "$FILENAME"
+#
+#      - uses: wzieba/Firebase-Distribution-Github-Action@v1
+#        with:
+#          appId: ${{ secrets.FIREBASE_APP_ID }}
+#          serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+#          file: ${{ env.FILENAME }}
+#          groups: production
