@@ -84,5 +84,5 @@ jobs:
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          file: app-prod-${{ github.sha }}.apk
+          file: ${{ env.FILENAME }}
           groups: production
