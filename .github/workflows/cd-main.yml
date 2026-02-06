@@ -34,11 +34,10 @@ jobs:
           BASE_URL: ${{ secrets.BASE_URL }}
           API_KEY: ${{ secrets.API_KEY }}
 
-      # Extract version from build.gradle
       - name: Get version
         id: get_version
         run: |
-          VERSION_NAME=$(grep "versionName" app/build.gradle.kts | sed 's/.*= "\(.*\)".*/\1/' | tr -d ' ')
+          VERSION_NAME=$(grep -A 5 "defaultConfig" app/build.gradle.kts | grep "versionName" | sed 's/.*= "\(.*\)".*/\1/' | tr -d ' ')
           echo "VERSION=$VERSION_NAME" >> $GITHUB_OUTPUT
           echo "Extracted version: $VERSION_NAME"
 
