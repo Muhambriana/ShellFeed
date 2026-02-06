@@ -36,10 +36,14 @@ jobs:
 
       # google drive app distribution
       - name: Setup Rclone
-        uses: rclone/rclone-action@v1
+        uses: AnimMouse/setup-rclone@v1
         with:
-          # This copies your APK to a folder named "Builds" on your Drive
-          args: copy "app/build/outputs/apk/production/release/app-production-release.apk" gdrive:Builds
+          # We pass the config as environment variables below, so we can leave this empty
+          rclone_config: ""
+
+      - name: Upload APK to Google Drive
+        run: |
+          rclone copyto "app/build/outputs/apk/production/release/app-production-release.apk" gdrive:latest-app.apk
         env:
           RCLONE_CONFIG_GDRIVE_TYPE: drive
           RCLONE_CONFIG_GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
