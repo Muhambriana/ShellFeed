@@ -1,4 +1,4 @@
-# Android CI/CD – Automated APK Build and Distribution
+# Android CI/CD Project Sample – Automated APK Build and Distribution
 
 
 A reproducible Continuous Integration and Continuous Deployment (CI/CD) pipeline for building, signing, and distributing Android APK artifacts automatically across multiple channels.
