@@ -121,7 +121,7 @@ Set filename:
 
 ## 4. APK Distribution
 
-### AWS S3
+### [AWS S3](https://github.com/Muhambriana/ShellFeed/edit/main/README-AWSS3-SETUP.MD)
 
 ``` yaml
 - name: Configure AWS Credentials
@@ -132,7 +132,7 @@ Set filename:
     aws-region: ${{ secrets.AWS_REGION }}
 ```
 
-### Google Drive (rclone)
+### [Google Drive (rclone)](https://github.com/Muhambriana/ShellFeed/blob/main/README-GOOGLEDRIVE-SETUP.MD)
 
 ``` yaml
 - name: Upload APK to Google Drive
@@ -140,7 +140,7 @@ Set filename:
     rclone copyto "app/build/outputs/apk/production/release/app-production-release.apk" "gdrive:$FILENAME"
 ```
 
-### Firebase App Distribution
+### [Firebase App Distribution](https://github.com/Muhambriana/ShellFeed/blob/main/README-FIREBASE-SETUP.MD)
 
 ``` yaml
 - name: Upload to Firebase
