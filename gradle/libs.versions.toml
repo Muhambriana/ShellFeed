@@ -11,9 +11,20 @@ composeBom = "2024.12.01"
 lifecycleRuntimeKtx = "2.10.0"
 navigationCompose = "2.8.5"
 coil = "2.5.0"
+junitVersion = "1.1.5"
+junit = "4.13.2"
+composeUiTest = "1.6.0"
+mockk = "1.14.9"
+kotlinx-test = "1.10.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+kotlinx-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-test"}
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion"}
+junit = { group = "junit", name = "junit", version.ref = "junit"}
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk"}
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk"}
+mockk-agent = { group = "io.mockk", name = "mockk-agent", version.ref = "mockk"}
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
@@ -29,6 +40,8 @@ koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin"
 # Jetpack Compose
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "composeUiTest"}
+compose-ui-test-junit = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "composeUiTest"}
 compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }

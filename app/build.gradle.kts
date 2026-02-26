@@ -94,9 +94,23 @@ android {
         buildConfig = true
         compose = true
     }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 dependencies {
+    // Unit Test
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.test)
+
+    // InstrumentedTest
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.compose.ui.test.junit)
+
+    debugImplementation(libs.compose.ui.test.manifest)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
