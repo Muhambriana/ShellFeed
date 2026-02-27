@@ -8,12 +8,12 @@ import com.mshell.shellfeed.utils.DataDummy
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.unmockkAll
-import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -28,6 +28,62 @@ class ShellFeedRepositoryTest {
     @Before
     fun setup() {
         repository = ShellFeedRepositoryImpl(remote)
+    }
+
+    @Test
+    fun `loading response`() = runTest {
+        val expectedProgress = 50
+        val expectedData = null
+
+        every { remote.getTopHeadlines("us") } returns
+                flowOf(
+                    ApiResponse.Progress(50)
+                )
+
+        val result = repository.getTopHeadlines("us").first()
+        assertTrue(result is Resource.Loading)
+
+        val progress = result.progress
+        assertEquals(expectedProgress, progress)
+
+        val data = result.data
+        assertEquals(expectedData, data)
+    }
+
+    @Test
+    fun `error response`() = runTest {
+        val expectedErrorMessage = "403 Forbidden"
+        val expectedData = null
+
+        every { remote.getTopHeadlines("us") } returns
+                flowOf(
+                    ApiResponse.Error("403 Forbidden")
+                )
+
+        val result = repository.getTopHeadlines("us").first()
+        assertTrue(result is Resource.Error)
+
+        val errorMessage = result.errorMessage
+        assertEquals(expectedErrorMessage, errorMessage)
+
+        val data = result.data
+        assertEquals(expectedData, data)
+    }
+
+    @Test
+    fun `empty data response`() = runTest {
+        val expectedData = null
+
+        every { remote.getTopHeadlines("us") } returns
+                flowOf(
+                    ApiResponse.Empty
+                )
+
+        val result = repository.getTopHeadlines("us").first()
+        assertTrue(result is Resource.Success)
+
+        val data = (result as Resource.Success).data
+        assertEquals(expectedData, data)
     }
 
     @Test
@@ -46,6 +102,7 @@ class ShellFeedRepositoryTest {
         assertNotNull(data)
         assertEquals(newsResponse,data)
     }
+
 
     @After
     fun tearDown() {
