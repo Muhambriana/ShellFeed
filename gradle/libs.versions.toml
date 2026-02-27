@@ -16,6 +16,7 @@ junit = "4.13.2"
 composeUiTest = "1.6.0"
 mockk = "1.14.9"
 kotlinx-test = "1.10.2"
+turbine = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -25,6 +26,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit"}
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk"}
 mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk"}
 mockk-agent = { group = "io.mockk", name = "mockk-agent", version.ref = "mockk"}
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine"}
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
