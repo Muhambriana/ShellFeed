@@ -95,18 +95,18 @@ fun NewsDetailScreen(
                 )
             },
         ) { paddingValues ->
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(
-                    top = HEADER_HEIGHT,
-                    bottom = paddingValues.calculateBottomPadding() + 24.dp,
-                    start = 24.dp,
-                    end = 24.dp
-                )
+            Column (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(
+                        top = HEADER_HEIGHT,
+                        bottom = paddingValues.calculateBottomPadding() + 24.dp,
+                        start = 24.dp,
+                        end = 24.dp
+                    )
             ) {
-                item {
-                    NewsBodyContent(newsDetail = newsDetail)
-                }
+                NewsBodyContent(newsDetail = newsDetail)
             }
         }
     }
@@ -163,10 +163,7 @@ fun NewsHeader(newsDetail: NewsDetail, headerHeight: androidx.compose.ui.unit.Dp
     ) {
         AsyncImage(
             placeholder = ColorPainter(Color.LightGray),
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(newsDetail.urlToImage)
-                .crossfade(true)
-                .build(),
+            model = newsDetail.urlToImage,
             contentDescription = "News Header Image",
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
