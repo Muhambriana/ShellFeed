@@ -51,11 +51,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # S3 app distribution
-      - name: Upload to S3 (Production)
-        run: |
-          aws s3 cp app/build/outputs/apk/production/release/app-production-release.apk \
-          s3://${{ secrets.AWS_S3_BUCKET_NAME }}/production/$FILENAME
+#      Temporary Inactive
+#      # S3 app distribution
+#      - name: Upload to S3 (Production)
+#        run: |
+#          aws s3 cp app/build/outputs/apk/production/release/app-production-release.apk \
+#          s3://${{ secrets.AWS_S3_BUCKET_NAME }}/production/$FILENAME
 
       # Google Drive app distribution
       - name: Setup Rclone
