@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.getByName
 import java.util.Locale
 import java.util.Properties
 
@@ -27,7 +26,7 @@ val baseURL: String by lazy { loadProperty("BASE_URL") }
 
 android {
     flavorDimensions += "env"
-    namespace = "com.mshell.shellfeed"
+    namespace = "com.mshell.feed"
     compileSdk {
         version = release(36)
     }
@@ -62,7 +61,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.mshell.shellfeed"
+        applicationId = "com.mshell.feed"
         minSdk = 26
         targetSdk = 36
         versionCode = 1

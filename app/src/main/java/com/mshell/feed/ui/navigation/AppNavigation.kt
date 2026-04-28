@@ -1,0 +1,59 @@
+package com.mshell.feed.ui.navigation
+
+import android.content.Intent
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.mshell.feed.core.domain.model.NewsDetail
+import com.mshell.feed.ui.features.news_detail.NewsDetailScreen
+import com.mshell.feed.ui.features.news_list.NewsListScreen
+
+@Composable
+fun AppNavigation(
+    navHostController: NavHostController = rememberNavController()
+) {
+    val context = LocalContext.current
+
+    NavHost(
+        navController = navHostController,
+        startDestination = Screen.NewsList.route
+    ) {
+        composable(Screen.NewsList.route) {
+            NewsListScreen(
+                onItemClick = { newsDetail ->
+                    navHostController.currentBackStackEntry?.savedStateHandle?.set(
+                        Screen.NEWS_DETAIL_ARGUMENT,
+                        newsDetail
+                    )
+                    navHostController.navigate(Screen.NewsDetail.route)
+                }
+            )
+        }
+
+        composable(Screen.NewsDetail.route) {
+            val newsDetail = navHostController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.get<NewsDetail>(Screen.NEWS_DETAIL_ARGUMENT)
+
+            newsDetail?.let { news ->
+                NewsDetailScreen(
+                    newsDetail = news,
+                    onBackClick = {
+                        navHostController.popBackStack()
+                    },
+                    onShareClick = {
+                        val shareIntent = Intent().apply {
+                            action = Intent.ACTION_SEND
+                            putExtra(Intent.EXTRA_TEXT, "${news.title}\n\n${news.url}")
+                            type = "text/plain"
+                        }
+                        context.startActivity(Intent.createChooser(shareIntent, "Share News"))
+                    }
+                )
+            }
+        }
+    }
+}
