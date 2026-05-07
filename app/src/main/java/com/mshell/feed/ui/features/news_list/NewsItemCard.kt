@@ -58,13 +58,13 @@ fun NewsItemCard(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = news.title ?: stringResource(R.string.hyphen),
+                    text = news.title ?: "Unknown Title",
                     style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = news.author ?: stringResource(R.string.hyphen),
+                    text = news.author ?: "Unknown",
                     style = MaterialTheme.typography.bodySmall)
             }
         }

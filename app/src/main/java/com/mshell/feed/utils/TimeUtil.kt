@@ -10,13 +10,13 @@ object TimeUtil {
     private val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
         .withLocale(Locale.ENGLISH)
     fun convertToDateString(dateTime: String?): String {
-        if (dateTime.isNullOrBlank()) return "-"
+        if (dateTime.isNullOrBlank()) return "Unknown Time"
         return try {
             val instant = Instant.parse(dateTime)
             val localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate()
             localDate.format(formatter)
         } catch (e: Exception) {
-            "-"
+            "Unknown Time"
         }
     }
 

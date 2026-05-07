@@ -168,7 +168,7 @@ fun NewsHeader(newsDetail: NewsDetail, headerHeight: androidx.compose.ui.unit.Dp
                 .padding(20.dp)
         ) {
             Text(
-                text = newsDetail.title ?: stringResource(R.string.hyphen),
+                text = newsDetail.title ?: "Unknown Title",
                 style = MaterialTheme.typography.headlineSmall.copy(fontSize = 20.sp),
                 color = Color.White,
             )
@@ -223,7 +223,7 @@ fun NewsBodyContent(newsDetail: NewsDetail) {
         modifier = Modifier.padding(top = 10.dp)
     ) {
         Text(
-            text = newsDetail.content ?: stringResource(R.string.hyphen),
+            text = newsDetail.content ?: "Unknown Content",
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontFamily = LoraFontFamily
             ),
