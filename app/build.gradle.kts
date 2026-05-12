@@ -64,8 +64,8 @@ android {
         applicationId = "com.mshell.feed"
         minSdk = 26
         targetSdk = 36
-        versionCode = 3
-        versionName = "1.0.1"
+        versionCode = 4
+        versionName = "1.0.2"
 
 
         buildConfigField("String", "API_KEY", apiKey)
