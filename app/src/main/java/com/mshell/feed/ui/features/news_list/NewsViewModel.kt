@@ -20,8 +20,18 @@ class NewsViewModel(private val repository: ShellFeedRepository): ViewModel() {
 
     fun getTopHeadLines(country: String) {
         viewModelScope.launch {
-            repository.getTopHeadlines(country).collect {
-                _newsState.value = it
+            repository.getTopHeadlines(country).collect { resource ->
+                when(resource) {
+                    is Resource.Success -> {
+                        val filteredList = resource.data?.filter {
+                            it.author.isNullOrBlank().not() && it.urlToImage.isNullOrBlank().not()
+                        }
+                        _newsState.value = Resource.Success(filteredList)
+                    }
+                    else -> {
+                        _newsState.value = resource
+                    }
+                }
             }
         }
     }
