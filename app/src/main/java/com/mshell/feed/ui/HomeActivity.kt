@@ -19,7 +19,9 @@ class HomeActivity : ComponentActivity() {
         setContent {
             ShellFeedTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AppNavigation()
+                    AppNavigation(
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
         }

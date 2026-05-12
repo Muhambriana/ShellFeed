@@ -4,45 +4,140 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.mshell.feed.R
 import com.mshell.feed.core.data.source.Resource
 import com.mshell.feed.core.domain.model.NewsDetail
 import com.mshell.feed.core.domain.model.Source
 import com.mshell.feed.ui.ui.theme.ShellFeedTheme
 import org.koin.androidx.compose.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsListScreen(
     viewModel: NewsViewModel = koinViewModel(),
     onItemClick: (NewsDetail) -> Unit = {}
 ) {
     val newsState by viewModel.newsState.collectAsState()
+    val scrollBehaviors = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    when(newsState) {
-        is Resource.Success -> {
-            val newsList = newsState.data
-            if (newsList.isNullOrEmpty()) {
-                return
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Scaffold(
+            modifier = Modifier.nestedScroll(scrollBehaviors.nestedScrollConnection),
+            containerColor = Color.Transparent,
+            topBar = {
+                NewsListTopBar(scrollBehaviors)
+            }
+        ) { paddingValues ->
+            when(newsState) {
+                is Resource.Success -> {
+                    val newsList = newsState.data
+                    if (newsList.isNullOrEmpty()) {
+                        return@Scaffold
+                    }
+
+                    NewsList(
+                        modifier = Modifier.padding(paddingValues),
+                        newsList,
+                        onItemClick = onItemClick
+                    )
+                }
+                else -> {}
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NewsListTopBar(
+    scrollBehavior: TopAppBarScrollBehavior
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val uriHandler = LocalUriHandler.current
+
+    CenterAlignedTopAppBar(
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.Transparent,
+            scrolledContainerColor = MaterialTheme.colorScheme.surface,
+        ),
+        scrollBehavior = scrollBehavior,
+        title = { stringResource(R.string.app_name) },
+        actions = {
+            IconButton(
+                onClick = { expanded = true }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = "More"
+                )
             }
 
-            NewsList(newsList, onItemClick = onItemClick)
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = {
+
+                }
+            ) {
+                DropdownMenuItem(
+                    text = {
+                        Text("Contact Us")
+                    },
+                    onClick = {
+                        uriHandler.openUri("https://sites.google.com/view/shellfeed-contact/home")
+                        expanded = false
+                    }
+                )
+
+                DropdownMenuItem(
+                    text = {
+                        Text("Privacy Policy")
+                    },
+                    onClick = {
+                        uriHandler.openUri("https://sites.google.com/view/privacy-policy-shell-feed/home")
+                        expanded = false
+                    }
+                )
+            }
         }
-        else -> {}
-    }
+    )
 }
 
 @Composable
 fun NewsList(
+    modifier: Modifier = Modifier,
     newsList: List<NewsDetail>,
     onItemClick: (NewsDetail) -> Unit = {}
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(

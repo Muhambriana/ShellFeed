@@ -1,7 +1,9 @@
 package com.mshell.feed.ui.navigation
 
 import android.content.Intent
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -13,13 +15,15 @@ import com.mshell.feed.ui.features.news_list.NewsListScreen
 
 @Composable
 fun AppNavigation(
+    modifier: Modifier = Modifier.fillMaxSize(),
     navHostController: NavHostController = rememberNavController()
 ) {
     val context = LocalContext.current
 
     NavHost(
         navController = navHostController,
-        startDestination = Screen.NewsList.route
+        startDestination = Screen.NewsList.route,
+        modifier = modifier
     ) {
         composable(Screen.NewsList.route) {
             NewsListScreen(
